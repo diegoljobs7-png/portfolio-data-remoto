@@ -1,0 +1,15 @@
+import pandas as pd
+import numpy as np
+
+np.random.seed(42)
+barrios = ['Nordelta', 'Villanueva', 'Tigre Centro'] * 3333
+consumo = np.random.normal(300, 80, 9999).tolist() + [800, 950, 1200] # 3 fugas
+
+df = pd.DataFrame({'barrio': barrios[:10000], 'consumo': consumo})
+media = df['consumo'].mean()
+desvio = df['consumo'].std()
+
+# Deteccion de outliers 3-sigma
+df['es_fuga'] = df['consumo'] > (media + 3*desvio)
+print(f"Fugas detectadas: {df['es_fuga'].sum()}")
+print(df[df['es_fuga'] == True])

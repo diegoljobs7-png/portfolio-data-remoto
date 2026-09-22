@@ -1,0 +1,24 @@
+import pandas as pd
+import numpy as np
+
+# Simula tu excel sucio
+data = {
+    'zona': [' Tigre ', 'BENAVIDEZ', 'tigre', 'Nordelta', None, 'TIGRE'],
+    'producto': [' cemento ', 'CEMENTO', 'ladrillo', 'Cemento', 'ladrillo', 'cemento'],
+    'total': [100000, -5000, 80000, 120000, 80000, 100000],
+    'fecha': ['2024/01/10', '10-01-2024', '2024-01-10', '2024/01/11', '2024-01-10', '2024/01/10']
+}
+df = pd.DataFrame(data)
+print(f"Original: {len(df)} filas")
+
+# TU ETL - Esto es lo que mostras en la entrevista
+df['zona'] = df['zona'].astype(str).str.strip().str.upper()
+df['producto'] = df['producto'].str.strip().str.upper()
+df = df.dropna()
+df = df[df['total'] > 0]
+df = df.drop_duplicates()
+df['fecha'] = pd.to_datetime(df['fecha'], errors='coerce')
+
+print(f"Limpio: {len(df)} filas")
+print(df)
+df.to_csv('ventas_limpias.csv', index=False)
